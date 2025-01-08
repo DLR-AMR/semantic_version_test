@@ -19,6 +19,8 @@ if [[ $VERSION_TEXT =~ v([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
     PATCH=${BASH_REMATCH[3]}
 fi
 
+echo "Latest version is: ${MAJOR}.${MINOR}.${PATCH}"
+
 # Checkout the branch
 git checkout ${BRANCH_NAME}
 
