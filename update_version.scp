@@ -5,18 +5,8 @@ git fetch --tags
 BRANCH_NAME=$2
 echo "The branch name is: ${BRANCH_NAME}"
 
-
-# Checkout the branch
-git checkout ${BRANCH_NAME}
-
-# Check if the latest commit is empty
-if ! git diff --quiet HEAD~1 HEAD; then
-    echo "The latest commit is not empty. Exiting."
-    exit 1
-fi
-
-# Get the current version from the latest tag. 
-VERSION_TEXT=`git describe --tags`
+# Get the current version from the latest tag on main
+VERSION_TEXT=$(git describe --tags origin/main)
 
 MAJOR=0
 MINOR=0
@@ -28,6 +18,16 @@ if [[ $VERSION_TEXT =~ v([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
     MINOR=${BASH_REMATCH[2]}
     PATCH=${BASH_REMATCH[3]}
 fi
+
+# Checkout the branch
+git checkout ${BRANCH_NAME}
+
+# Check if the latest commit is empty
+if ! git diff --quiet HEAD~1 HEAD; then
+    echo "The latest commit is not empty. Exiting."
+    exit 1
+fi
+
 
 # Get the latest commit message
 LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
