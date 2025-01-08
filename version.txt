@@ -1,12 +1,12 @@
 const int major_version = 0;
 
-const int minor_version = 1;
+const int minor_version = 2;
 
 const int patch = 0;
 
-version: 0.1.0
+version: 0.2.0
 
 
 Format: yyyy-mm-dd
-date-released: "2025-01-07"
+date-released: "2025-01-08"
 
