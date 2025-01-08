@@ -8,6 +8,7 @@ echo "The branch name is: ${BRANCH_NAME}"
 # Get the current version from the latest tag on main
 VERSION_TEXT=$(git describe --tags origin/main)
 
+
 MAJOR=0
 MINOR=0
 PATCH=0
