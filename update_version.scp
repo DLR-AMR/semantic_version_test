@@ -68,6 +68,13 @@ fi
 
 # Set the new version text
 NEW_VERSION="${MAJOR}.${MINOR}.${PATCH}"
+
+# Check that the new version is indeed larger than the latest version
+if [[ $MAJOR -lt ${BASH_REMATCH[1]} || ($MAJOR -eq ${BASH_REMATCH[1]} && $MINOR -lt ${BASH_REMATCH[2]}) || ($MAJOR -eq ${BASH_REMATCH[1]} && $MINOR -eq ${BASH_REMATCH[2]} && $PATCH -le ${BASH_REMATCH[3]}) ]]; then
+    echo "The new version must be greater than the latest version."
+    exit 1
+fi
+
 echo "NEW_VERSION: ${NEW_VERSION}"
 NEW_VERSION_TEXT="v${NEW_VERSION}"
 
