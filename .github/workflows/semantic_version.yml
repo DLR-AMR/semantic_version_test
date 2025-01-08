@@ -19,8 +19,6 @@ jobs:
     - name: Get current branch name
       id: get_branch
       run: echo "branch_name=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
-    - name: Update packages
-      run: sudo apt-get update && sudo apt-get upgrade -y
     - name: Check for major tag
       if: contains(github.event.pull_request.labels.*.name, 'major')
       run: ./update_version.scp MAJOR ${GITHUB_HEAD_REF}
