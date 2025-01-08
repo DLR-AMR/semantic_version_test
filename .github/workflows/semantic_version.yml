@@ -1,0 +1,35 @@
+name: Semantic Versioning
+
+permissions:
+  contents: write
+
+on:
+  pull_request:
+
+jobs:
+  semantic_version:
+    runs-on: ubuntu-20.04
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+        ref: ${{ github.event.pull_request.head.ref }}
+        fetch-depth: 0
+    - name: Get current branch name
+      id: get_branch
+      run: echo "branch_name=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
+    - name: Update packages
+      run: sudo apt-get update && sudo apt-get upgrade -y
+    - name: Check for major tag
+      if: contains(github.event.pull_request.labels.*.name, 'major')
+      run: ./update_version.scp MAJOR ${GITHUB_HEAD_REF}
+    - name: Check for minor tag
+      if: contains(github.event.pull_request.labels.*.name, 'minor')
+      run: ./update_version.scp MINOR ${GITHUB_HEAD_REF}
+    - name: Check for patch tag
+      if: contains(github.event.pull_request.labels.*.name, 'patch')
+      run: ./update_version.scp PATCH ${GITHUB_HEAD_REF}
+    
+
+        
