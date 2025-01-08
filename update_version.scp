@@ -30,7 +30,7 @@ if [[ $LATEST_COMMIT_MESSAGE == *"Update Version"* ]]; then
     echo "Start Version Update"
 else
     echo "Do not update the version"
-    exit 1
+    exit 0
 fi
 
 # Get the first argument that is given to this script. 
