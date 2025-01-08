@@ -8,6 +8,6 @@ const int minor_version = 0;
 const int patch = 0;
 
 Format: yyyy-mm-dd
-date-released: "2025-01-08"
+date-released: "2025-01-07"
 
 version: 2.0.0
