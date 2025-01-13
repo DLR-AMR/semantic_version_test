@@ -10,5 +10,5 @@ const int patch = 0;
 Format: yyyy-mm-dd
 date-released: "2025-01-13"
 
-version: 3.87.0
+version: 3.8.0
 
