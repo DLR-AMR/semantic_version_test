@@ -1,4 +1,4 @@
-# Semantiv versioning
+# Semantic versioning
 
 This is a small tool to automate our versioning. 
 
