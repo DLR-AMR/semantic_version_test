@@ -107,8 +107,8 @@ sed -i "s/date-released: \".*\"/date-released: \"${CURRENT_DATE}\"/" version.txt
 GIT_COMMIT_MESSAGE="Updated the version to ${NEW_VERSION}"
 
 # Add the changes to a new commit
-git config user.name github-actions
-git config user.email github-actions@github.com
+git config user.name t8ddy
+git config user.email ${{ secrets.T8DDY_MAIL }}
 
 echo "git add version.txt"
 git add version.txt
