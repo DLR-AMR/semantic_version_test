@@ -30,27 +30,17 @@ git checkout ${BRANCH_NAME}
 # Get the latest commit message
 LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 
-# Check if the latest commit message is of the format "Updated the version to MAJOR.MINOR.PATCH"
-if [[ $LATEST_COMMIT_MESSAGE =~ Updated\ the\ version\ to\ ([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
-    CHECK_MAJOR=${BASH_REMATCH[1]}
-    CHECK_MINOR=${BASH_REMATCH[2]}
-    CHECK_PATCH=${BASH_REMATCH[3]}
-    echo "The latest commit message is: Updated the version to ${CHECK_MAJOR}.${CHECK_MINOR}.${CHECK_PATCH}"
-    exit 0
-# Check if the latest commit message contains the phrase "Update Version"
-elif [[ $LATEST_COMMIT_MESSAGE == *"Update Version"* ]]; then
-    echo "Start Version Update"
-else
-    echo "Do not update the version"
-    exit 1
-fi
-
 # Check if the latest commit is empty
 if ! git diff --quiet HEAD~1 HEAD; then
     echo "The latest commit is not empty. Exiting."
     exit 1
 fi
 
+
+if [[ "$LATEST_COMMIT_MESSAGE" != "Update Version" ]]; then
+    echo "The latest commit message is not 'Update Version'. Exiting."
+    exit 1
+fi
 # Get the first argument that is given to this script. 
 # It should describe the type of version update.
 ARGUMENT=$1
@@ -100,9 +90,12 @@ sed -i "s/const int patch = [0-9]\+/const int patch = ${PATCH}/" version.txt
 # Update the version in version.txt
 sed -i "s/version: [0-9]\+\.[0-9]\+\.[0-9]\+/version: ${NEW_VERSION}/" version.txt
 
+# Update the version in version.txt
+sed -i "s/version: [0-9]\+\.[0-9]\+\.[0-9]\+/version: ${NEW_VERSION}/" CITATIO.cff
+
 # Update the date-released in version.txt
 CURRENT_DATE=$(date +%F)
-sed -i "s/date-released: \".*\"/date-released: \"${CURRENT_DATE}\"/" version.txt
+sed -i "s/date-released: \".*\"/date-released: \"${CURRENT_DATE}\"/" CITATION.cff
 
 GIT_COMMIT_MESSAGE="Updated the version to ${NEW_VERSION}"
 
@@ -113,6 +106,7 @@ git config user.email ${{ secrets.T8DDY_MAIL }}
 
 echo "git add version.txt"
 git add version.txt
+git add CITATION.cff
 echo "git commit -m $GIT_COMMIT_MESSAGE"
 git commit -m "$GIT_COMMIT_MESSAGE"
 
