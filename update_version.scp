@@ -25,21 +25,29 @@ echo "Latest version is: ${MAJOR}.${MINOR}.${PATCH}"
 # Checkout the branch
 git checkout ${BRANCH_NAME}
 
-# Check if the latest commit is empty
-if ! git diff --quiet HEAD~1 HEAD; then
-    echo "The latest commit is not empty. Exiting."
-    exit 1
-fi
 
 
 # Get the latest commit message
 LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
 
+# Check if the latest commit message is of the format "Updated the version to MAJOR.MINOR.PATCH"
+if [[ $LATEST_COMMIT_MESSAGE =~ Updated\ the\ version\ to\ ([0-9]+)\.([0-9]+)\.([0-9]+) ]]; then
+    CHECK_MAJOR=${BASH_REMATCH[1]}
+    CHECK_MINOR=${BASH_REMATCH[2]}
+    CHECK_PATCH=${BASH_REMATCH[3]}
+    echo "The latest commit message is: Updated the version to ${CHECK_MAJOR}.${CHECK_MINOR}.${CHECK_PATCH}"
+    exit 0
 # Check if the latest commit message contains the phrase "Update Version"
-if [[ $LATEST_COMMIT_MESSAGE == *"Update Version"* ]]; then
+elif [[ $LATEST_COMMIT_MESSAGE == *"Update Version"* ]]; then
     echo "Start Version Update"
 else
     echo "Do not update the version"
+    exit 1
+fi
+
+# Check if the latest commit is empty
+if ! git diff --quiet HEAD~1 HEAD; then
+    echo "The latest commit is not empty. Exiting."
     exit 1
 fi
 
@@ -99,8 +107,9 @@ sed -i "s/date-released: \".*\"/date-released: \"${CURRENT_DATE}\"/" version.txt
 GIT_COMMIT_MESSAGE="Updated the version to ${NEW_VERSION}"
 
 # Add the changes to a new commit
-git config user.name github-actions
-git config user.email github-actions@github.com
+git config user.name t8ddy
+git config user.email ${{ secrets.T8DDY_MAIL }}
+
 
 echo "git add version.txt"
 git add version.txt

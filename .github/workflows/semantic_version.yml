@@ -3,6 +3,7 @@ name: Semantic Versioning
 permissions:
   contents: write
 
+
 on:
   pull_request:
 
@@ -10,11 +11,13 @@ jobs:
   semantic_version:
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    steps: 
+    steps:
     - uses: actions/checkout@v4
       with:
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+        ref: ${{ github.event.pull_request.head.ref }}
+        token: ${{ secrets.T8DDY_TOKEN }}
         fetch-depth: 0
-        fetch-tags: true # required to get version tags
     - name: Get current branch name
       id: get_branch
       run: echo "branch_name=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
@@ -27,6 +30,3 @@ jobs:
     - name: Check for patch tag
       if: contains(github.event.pull_request.labels.*.name, 'patch')
       run: ./update_version.scp PATCH ${GITHUB_HEAD_REF}
-    
-
-        
