@@ -100,7 +100,7 @@ jobs:
                 echo "Minor version is not the next minor version."
                 exit 1
             fi
-            if [[ "$PATCH" -ne $LATEST_MAIN_PATCH ]]; then
+            if [[ "$PATCH" -ne 0]]; then
                 echo "Patch version is not zero"
                 exit 1
             fi
