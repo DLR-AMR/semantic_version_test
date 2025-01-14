@@ -102,7 +102,6 @@ GIT_COMMIT_MESSAGE="Updated the version to ${NEW_VERSION}"
 
 # Add the changes to a new commit
 git config user.name t8ddy
-git config user.email ${{ secrets.T8DDY_MAIL }}
 
 
 echo "git add version.txt"
