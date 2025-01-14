@@ -1,0 +1,13 @@
+title: semantic versioning
+version: 3.8.0
+date-released: "2025-01-14"
+repository-code: https://github.com/DLR-AMR/semantic_version_test
+license: MIT
+type: software
+authors:
+  #Authors
+  - given-names: David
+    family-names: Knapp
+    email: David.Knapp@dlr.de
+    affiliation: "German Aerospace Center (DLR)"
+    orcid: "https://orcid.org/0000-0002-6305-1572"
