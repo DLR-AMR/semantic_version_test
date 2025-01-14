@@ -41,6 +41,7 @@ jobs:
         - name: Get version from tag
           run: |
             TAG_VERSION=$(git describe --tags --abbrev=0)
+            TAG_VERSION=$(echo "$TAG_VERSION" | sed 's/^v//')
             TAG_MAJOR=$(echo "$TAG_VERSION" | cut -d. -f1)
             TAG_MINOR=$(echo "$TAG_VERSION" | cut -d. -f2)
             TAG_PATCH=$(echo "$TAG_VERSION" | cut -d. -f3)
