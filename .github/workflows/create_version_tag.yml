@@ -19,7 +19,7 @@ jobs:
         ref: ${{ github.event.pull_request.head.ref }}
         token: ${{ secrets.T8DDY_TOKEN }}
         fetch-depth: 0
-    - name:
+    - name: debugging
       run: echo ${{ github.event.head_commit.message }}
     - name: Get current branch name
       id: get_branch
