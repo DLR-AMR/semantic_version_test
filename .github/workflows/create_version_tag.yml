@@ -1,4 +1,4 @@
-name: Upddate Version
+name: Update Version
 
 permissions:
   contents: write
@@ -10,6 +10,7 @@ on:
 
 jobs:
   update_version:
+    if: contains(github.event.pull_request.title, 'Update Version')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
