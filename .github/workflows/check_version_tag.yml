@@ -49,6 +49,19 @@ jobs:
             echo "TAG_MAJOR=$TAG_MAJOR" >> $GITHUB_ENV
             echo "TAG_MINOR=$TAG_MINOR" >> $GITHUB_ENV
             echo "TAG_PATCH=$TAG_PATCH" >> $GITHUB_ENV
+        - name: Check tag
+          run: |
+            if [[ "$MAJOR" -ne "$TAG_MAJOR" ]]; then
+                echo "Major version does not match the tag."
+                exit 1
+            fi
+            if [[ "$MINOR" -ne "$TAG_MINOR" ]]; then
+                echo "Minor version does not match the tag."
+                exit 1
+            fi
+            if [[ "$PATCH" -ne "$TAG_PATCH" ]]; then
+                echo "Patch version does not match the tag."
+                exit 1
         - name: Fetch latest version from main branch
           run: |
             git fetch origin main
@@ -63,30 +76,22 @@ jobs:
         - name: Check correct major version
           if: contains(github.event.pull_request.labels.*.name, 'major')
           run: |
-            if [[ "$MAJOR" -ne "$TAG_MAJOR" ]]; then
-                echo "Major version does not match the tag."
-                exit 1
-            fi
             if [[ "$MAJOR" -ne $((LATEST_MAIN_MAJOR + 1)) ]]; then
                 echo "Major version is not the next major version."
                 exit 1
             fi
-            if [[ "$MINOR" -ne $LATEST_MAIN_MINOR ]]; then
-                echo "Minor version does not match the latest main branch version."
+            if [[ "$MINOR" -ne 0 ]]; then
+                echo "Minor version is not 0."
                 exit 1
             fi
-            if [[ "$PATCH" -ne $LATEST_MAIN_PATCH ]]; then
-                echo "Patch version does not match the latest main branch version."
+            if [[ "$PATCH" -ne 0]]; then
+                echo "Patch version is not zero."
                 exit 1
         - name: Check correct minor version
           if: contains(github.event.pull_request.labels.*.name, 'minor')
           run: |
-            if [[ "$MINOR" -ne "$TAG_MINOR" ]]; then
-                echo "Major version does not match the tag."
-                exit 1
-            fi
             if [[ "$MAJOR" -ne "$LATEST_MAIN_MAJOR" ]]; then
-                echo "Minor version does not match the tag."
+                echo "Major version does not match the latest main branch version."
                 exit 1
             fi
             if [[ "$MINOR" -ne $((LATEST_MAIN_MINOR + 1)) ]]; then
@@ -94,26 +99,22 @@ jobs:
                 exit 1
             fi
             if [[ "$PATCH" -ne $LATEST_MAIN_PATCH ]]; then
-                echo "Patch version does not match the latest main branch version."
+                echo "Patch version is not zero"
                 exit 1
                 - name: Check correct minor version
         - name: Check correct patch version
           if: contains(github.event.pull_request.labels.*.name, 'patch')
           run: |
-            if [[ "$PATCCH" -ne "$TAG_PATCH" ]]; then
-                echo "Major version does not match the tag."
-                exit 1
-            fi
             if [[ "$MAJOR" -ne "$LATEST_MAIN_MAJOR" ]]; then
-                echo "Minor version does not match the tag."
+                echo "Major version does not match the latest main branch version.."
                 exit 1
             fi
-            if [[ "$MINOR" -ne $((LATEST_MAIN_MINOR +)) ]]; then
-                echo "Minor version is not the next minor version."
+            if [[ "$MINOR" -ne $LATEST_MAIN_MINOR ]]; then
+                echo "MINOR version does not match the latest main branch version."
                 exit 1
             fi
             if [[ "$PATCH" -ne $((LATEST_MAIN_PATCH + 1)) ]]; then
-                echo "Patch version does not match the latest main branch version."
+                echo "Patch version is not the next patch version.
                 exit 1
 
         
