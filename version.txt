@@ -5,11 +5,11 @@ const int major_version = 5;
 
 const int minor_version = 0;
 
-const int patch = 0;
+const int patch = 1;
 
 Format: yyyy-mm-dd
 date-released: "2025-01-14"
 
 
-version: 5.0.0
+version: 5.0.1
 
