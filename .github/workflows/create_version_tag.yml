@@ -12,6 +12,7 @@ jobs:
   update_version:
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    if: ${{ contains(github.event.head_commit.message, 'Update Version') }}
     steps:
     - uses: actions/checkout@v4
       with:
@@ -19,8 +20,6 @@ jobs:
         ref: ${{ github.event.pull_request.head.ref }}
         token: ${{ secrets.T8DDY_TOKEN }}
         fetch-depth: 0
-    - name: debugging
-      run: echo "commit_message=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
     - name: Get current branch name
       id: get_branch
       run: echo "branch_name=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
