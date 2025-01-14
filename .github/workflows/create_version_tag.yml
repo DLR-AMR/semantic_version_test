@@ -20,7 +20,7 @@ jobs:
         token: ${{ secrets.T8DDY_TOKEN }}
         fetch-depth: 0
     - name: debugging
-      run: echo ${{ github.event.head_commit.message }}
+      run: echo "commit_message=${{ github.event.head_commit.message }}" >> $GITHUB_ENV
     - name: Get current branch name
       id: get_branch
       run: echo "branch_name=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
