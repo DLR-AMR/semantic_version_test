@@ -18,6 +18,7 @@ jobs:
       id: check_commit_message
       run: |
         COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+        echo "$COMMIT_MESSAGE"
         if [[ "$COMMIT_MESSAGE" == "Update Version" ]]; then
           echo "Update version"
           echo "VERSION_UPDATE=true" >> $GITHUB_OUTPUT
