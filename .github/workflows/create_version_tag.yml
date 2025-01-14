@@ -10,7 +10,6 @@ on:
 
 jobs:
   update_version:
-    if: contains(github.event.head_commit.message, 'Update Version')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -20,6 +19,8 @@ jobs:
         ref: ${{ github.event.pull_request.head.ref }}
         token: ${{ secrets.T8DDY_TOKEN }}
         fetch-depth: 0
+    - name:
+      run: echo ${{ github.event.head_commit.message }}
     - name: Get current branch name
       id: get_branch
       run: echo "branch_name=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
