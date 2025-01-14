@@ -91,11 +91,12 @@ sed -i "s/const int patch = [0-9]\+/const int patch = ${PATCH}/" version.txt
 sed -i "s/version: [0-9]\+\.[0-9]\+\.[0-9]\+/version: ${NEW_VERSION}/" version.txt
 
 # Update the version in version.txt
-sed -i "s/version: [0-9]\+\.[0-9]\+\.[0-9]\+/version: ${NEW_VERSION}/" CITATIO.cff
+sed -i "s/version: [0-9]\+\.[0-9]\+\.[0-9]\+/version: ${NEW_VERSION}/" CITATION.cff
 
 # Update the date-released in version.txt
 CURRENT_DATE=$(date +%F)
-sed -i "s/date-released: \".*\"/date-released: \"${CURRENT_DATE}\"/" CITATION.cff
+sed -i "s/date-released: [0-9]\{4\}\.[0-9]\{2\}\.[0-9]\{2\}/date-released: ${CURRENT_DATE}/" version.txt
+sed -i "s/date-released: [0-9]\{4\}\.[0-9]\{2\}\.[0-9]\{2\}/date-released: ${CURRENT_DATE}/" CITATION.cff
 
 GIT_COMMIT_MESSAGE="Updated the version to ${NEW_VERSION}"
 
