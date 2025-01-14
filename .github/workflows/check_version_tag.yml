@@ -116,7 +116,7 @@ jobs:
                 exit 1
             fi
             if [[ "$PATCH" -ne $((LATEST_MAIN_PATCH + 1)) ]]; then
-                echo "Patch version is not the next patch version.
+                echo "Patch version is not the next patch version."
                 exit 1
             fi
 
