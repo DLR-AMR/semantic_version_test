@@ -3,7 +3,9 @@ name: Check Version
 
 on:
     pull_request:
+        types: [synchronize]
         branches:
+            - main
         paths:
             - 'CITATION.cff'
 
