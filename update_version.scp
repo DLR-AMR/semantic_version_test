@@ -36,6 +36,11 @@ if ! git diff --quiet HEAD~1 HEAD; then
     exit 1
 fi
 
+
+if [[ "$LATEST_COMMIT_MESSAGE" != "Update Version" ]]; then
+    echo "The latest commit message is not 'Update Version'. Exiting."
+    exit 1
+fi
 # Get the first argument that is given to this script. 
 # It should describe the type of version update.
 ARGUMENT=$1
