@@ -1,0 +1,59 @@
+name: Update Version
+
+permissions:
+  contents: write
+
+
+on:
+  pull_request:
+
+jobs:
+  check_commit_message:
+    runs-on: ubuntu-latest
+    outputs: 
+      trigger_version_update: ${{ steps.check_commit_message.outputs.VERSION_UPDATE }}
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+        ref: ${{ github.event.pull_request.head.ref }}
+        fetch-depth: 0
+    - name: Check commit message
+      id: check_commit_message
+      run: |
+        COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+        echo "message: $COMMIT_MESSAGE"
+        if [[ "$COMMIT_MESSAGE" == "Update Version" ]]; then
+          echo "Update version"
+          echo "VERSION_UPDATE=true" >> $GITHUB_OUTPUT
+        else
+          echo "do not update version"
+          echo "VERSION_UPDATE=false" >> $GITHUB_OUTPUT
+        fi
+
+    
+
+  update_version:
+    runs-on: ubuntu-latest
+    needs: check_commit_message
+    if: ${{ needs.check_commit_message.outputs.trigger_version_update == 'true' }}
+    timeout-minutes: 10
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        repository: ${{ github.event.pull_request.head.repo.full_name }}
+        ref: ${{ github.event.pull_request.head.ref }}
+        token: ${{ secrets.T8DDY_TOKEN }}
+        fetch-depth: 0
+    - name: Get current branch name
+      id: get_branch
+      run: echo "branch_name=${GITHUB_HEAD_REF}" >> $GITHUB_ENV
+    - name: Check for major tag
+      if: contains(github.event.pull_request.labels.*.name, 'major')
+      run: ./update_version.scp MAJOR ${GITHUB_HEAD_REF}
+    - name: Check for minor tag
+      if: contains(github.event.pull_request.labels.*.name, 'minor')
+      run: ./update_version.scp MINOR ${GITHUB_HEAD_REF}
+    - name: Check for patch tag
+      if: contains(github.event.pull_request.labels.*.name, 'patch')
+      run: ./update_version.scp PATCH ${GITHUB_HEAD_REF}

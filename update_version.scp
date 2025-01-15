@@ -25,6 +25,11 @@ echo "Latest version is: ${MAJOR}.${MINOR}.${PATCH}"
 # Checkout the branch
 git checkout ${BRANCH_NAME}
 
+
+
+# Get the latest commit message
+LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
+
 # Check if the latest commit is empty
 if ! git diff --quiet HEAD~1 HEAD; then
     echo "The latest commit is not empty. Exiting."
@@ -32,17 +37,10 @@ if ! git diff --quiet HEAD~1 HEAD; then
 fi
 
 
-# Get the latest commit message
-LATEST_COMMIT_MESSAGE=$(git log -1 --pretty=%B)
-
-# Check if the latest commit message contains the phrase "Update Version"
-if [[ $LATEST_COMMIT_MESSAGE == *"Update Version"* ]]; then
-    echo "Start Version Update"
-else
-    echo "Do not update the version"
+if [[ "$LATEST_COMMIT_MESSAGE" != "Update Version" ]]; then
+    echo "The latest commit message is not 'Update Version'. Exiting."
     exit 1
 fi
-
 # Get the first argument that is given to this script. 
 # It should describe the type of version update.
 ARGUMENT=$1
@@ -92,18 +90,23 @@ sed -i "s/const int patch = [0-9]\+/const int patch = ${PATCH}/" version.txt
 # Update the version in version.txt
 sed -i "s/version: [0-9]\+\.[0-9]\+\.[0-9]\+/version: ${NEW_VERSION}/" version.txt
 
+# Update the version in version.txt
+sed -i "s/version: [0-9]\+\.[0-9]\+\.[0-9]\+/version: ${NEW_VERSION}/" CITATION.cff
+
 # Update the date-released in version.txt
 CURRENT_DATE=$(date +%F)
-sed -i "s/date-released: \".*\"/date-released: \"${CURRENT_DATE}\"/" version.txt
+sed -i "s/date-released: [0-9]\{4\}\.[0-9]\{2\}\.[0-9]\{2\}/date-released: ${CURRENT_DATE}/" version.txt
+sed -i "s/date-released: [0-9]\{4\}\.[0-9]\{2\}\.[0-9]\{2\}/date-released: ${CURRENT_DATE}/" CITATION.cff
 
 GIT_COMMIT_MESSAGE="Updated the version to ${NEW_VERSION}"
 
 # Add the changes to a new commit
-git config user.name github-actions
-git config user.email github-actions@github.com
+git config user.name t8ddy
+
 
 echo "git add version.txt"
 git add version.txt
+git add CITATION.cff
 echo "git commit -m $GIT_COMMIT_MESSAGE"
 git commit -m "$GIT_COMMIT_MESSAGE"
 
